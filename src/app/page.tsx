@@ -8,10 +8,11 @@ import { FeaturedWork } from "@/components/sections/featured-work";
 import { BeforeAfter } from "@/components/sections/before-after";
 import { EditingStyle } from "@/components/sections/editing-style";
 import { CreativeWorkflow } from "@/components/sections/creative-workflow";
-import { CoursesPreview } from "@/components/sections/courses-preview";
+import { ToolsIUse } from "@/components/sections/tools-i-use";
+import { SelectedCaseStudies } from "@/components/sections/selected-case-studies";
+import { CoursesMini } from "@/components/sections/courses-mini";
 import { Testimonials } from "@/components/sections/testimonials";
-import { ToolsSection } from "@/components/sections/tools-section";
-import { CTASection } from "@/components/sections/cta-section";
+import { FinalCTA } from "@/components/sections/final-cta";
 
 export default function HomePage() {
   return (
@@ -24,10 +25,11 @@ export default function HomePage() {
       <BeforeAfter />
       <EditingStyle />
       <CreativeWorkflow />
-      <CoursesPreview />
+      <ToolsIUse />
+      <SelectedCaseStudies />
+      <CoursesMini />
       <Testimonials />
-      <ToolsSection />
-      <CTASection />
+      <FinalCTA />
     </>
   );
 }
