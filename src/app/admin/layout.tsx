@@ -15,15 +15,19 @@ import {
   Menu,
   X,
   Sparkles,
+  FileText,
+  Palette,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const adminLinks = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Header & Hero", href: "/admin/header-hero", icon: Palette },
   { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen },
   { name: "Courses", href: "/admin/courses", icon: BookOpen },
   { name: "Services", href: "/admin/services", icon: Briefcase },
   { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
+  { name: "Blog Posts", href: "/admin/blog", icon: FileText },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
