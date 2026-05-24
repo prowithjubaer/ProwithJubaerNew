@@ -6,10 +6,19 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
-  FolderOpen,
   BookOpen,
+  Users,
+  CreditCard,
+  FileText,
+  FolderOpen,
   Briefcase,
   MessageSquare,
+  HelpCircle,
+  Mail,
+  Image,
+  Search,
+  Wallet,
+  Palette,
   Settings,
   LogOut,
   Menu,
@@ -19,13 +28,31 @@ import {
 import { cn } from "@/lib/utils";
 
 const adminLinks = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen },
-  { name: "Courses", href: "/admin/courses", icon: BookOpen },
-  { name: "Services", href: "/admin/services", icon: Briefcase },
-  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
+  // Main
+  { name: "Dashboard", href: "/admin", icon: LayoutDashboard, group: "Main" },
+
+  // Content
+  { name: "Courses", href: "/admin/courses", icon: BookOpen, group: "Content" },
+  { name: "Blog", href: "/admin/blog", icon: FileText, group: "Content" },
+  { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen, group: "Content" },
+  { name: "Services", href: "/admin/services", icon: Briefcase, group: "Content" },
+  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare, group: "Content" },
+  { name: "FAQ", href: "/admin/faq", icon: HelpCircle, group: "Content" },
+  { name: "Media", href: "/admin/media", icon: Image, group: "Content" },
+
+  // Users
+  { name: "Students", href: "/admin/students", icon: Users, group: "Users" },
+  { name: "Enrollments", href: "/admin/enrollments", icon: CreditCard, group: "Users" },
+  { name: "Messages", href: "/admin/messages", icon: Mail, group: "Users" },
+
+  // Settings
+  { name: "Payments", href: "/admin/payments", icon: Wallet, group: "Settings" },
+  { name: "SEO", href: "/admin/seo", icon: Search, group: "Settings" },
+  { name: "Theme", href: "/admin/theme", icon: Palette, group: "Settings" },
+  { name: "Settings", href: "/admin/settings", icon: Settings, group: "Settings" },
 ];
+
+const groups = ["Main", "Content", "Users", "Settings"];
 
 export default function AdminLayout({
   children,
@@ -145,35 +172,46 @@ export default function AdminLayout({
           )}
         >
           <div className="flex flex-col h-full">
-            <div className="mb-6 p-3 rounded-xl bg-primary-500/10 border border-primary-500/20">
+            <div className="mb-4 p-3 rounded-xl bg-primary-500/10 border border-primary-500/20">
               <p className="font-bold text-sm">Admin Panel</p>
               <p className="text-xs text-muted-foreground">
                 Manage your website
               </p>
             </div>
 
-            <nav className="space-y-1 flex-1">
-              {adminLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all",
-                    pathname === link.href
-                      ? "bg-primary-500/10 text-primary-500 border border-primary-500/20"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            <nav className="flex-1 overflow-y-auto space-y-1 pr-1">
+              {groups.map((group) => (
+                <div key={group}>
+                  {group !== "Main" && (
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-semibold mt-4 mb-1 px-4">
+                      {group}
+                    </p>
                   )}
-                >
-                  <link.icon className="w-4 h-4" />
-                  {link.name}
-                </Link>
+                  {adminLinks
+                    .filter((link) => link.group === group)
+                    .map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setSidebarOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition-all",
+                          pathname === link.href
+                            ? "bg-primary-500/10 text-primary-500 border border-primary-500/20"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        )}
+                      >
+                        <link.icon className="w-4 h-4" />
+                        {link.name}
+                      </Link>
+                    ))}
+                </div>
               ))}
             </nav>
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all mt-2"
             >
               <LogOut className="w-4 h-4" />
               Logout
