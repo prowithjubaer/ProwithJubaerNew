@@ -17,8 +17,14 @@ import {
   Sparkles,
   FileText,
   Palette,
+  HelpCircle,
+  Download,
+  FlaskConical,
+  Mail,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/admin-store";
 
 const adminLinks = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -28,6 +34,10 @@ const adminLinks = [
   { name: "Services", href: "/admin/services", icon: Briefcase },
   { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blog", icon: FileText },
+  { name: "Case Studies", href: "/admin/case-studies", icon: FlaskConical },
+  { name: "Resources", href: "/admin/resources", icon: Download },
+  { name: "FAQ", href: "/admin/faq", icon: HelpCircle },
+  { name: "Messages", href: "/admin/messages", icon: Mail },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -36,35 +46,36 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const pathname = usePathname();
 
+  const { isAuthenticated, loading, error, login, logout, checkAuth } =
+    useAuthStore();
+
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginLoading, setLoginLoading] = useState(false);
+
   useEffect(() => {
-    const auth = localStorage.getItem("admin_auth");
-    if (auth === "true") setIsAuthenticated(true);
-  }, []);
+    checkAuth();
+  }, [checkAuth]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo credentials
-    if (
-      loginData.email === "admin@prowithjubaer.com" &&
-      loginData.password === "admin123"
-    ) {
-      setIsAuthenticated(true);
-      localStorage.setItem("admin_auth", "true");
-    } else {
-      alert("Invalid credentials. Use: admin@prowithjubaer.com / admin123");
-    }
+    setLoginLoading(true);
+    await login(loginData.email, loginData.password);
+    setLoginLoading(false);
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("admin_auth");
-  };
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+      </div>
+    );
+  }
 
+  // Login screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 pt-20">
@@ -113,16 +124,25 @@ export default function AdminLayout({
                   required
                 />
               </div>
+
+              {error && (
+                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-500/25"
+                disabled={loginLoading}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-500/25 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                Sign In
+                {loginLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {loginLoading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 
             <p className="text-xs text-muted-foreground text-center mt-4">
-              Demo: admin@prowithjubaer.com / admin123
+              Use your Supabase Auth credentials
             </p>
           </div>
         </motion.div>
@@ -130,6 +150,7 @@ export default function AdminLayout({
     );
   }
 
+  // Authenticated - Admin Layout
   return (
     <div className="min-h-screen pt-20">
       {/* Mobile sidebar toggle */}
@@ -137,15 +158,21 @@ export default function AdminLayout({
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="fixed bottom-6 right-6 z-50 lg:hidden w-12 h-12 rounded-xl bg-primary-500 text-white flex items-center justify-center shadow-lg"
       >
-        {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        {sidebarOpen ? (
+          <X className="w-5 h-5" />
+        ) : (
+          <Menu className="w-5 h-5" />
+        )}
       </button>
 
       <div className="flex">
         {/* Sidebar */}
         <aside
           className={cn(
-            "fixed lg:sticky top-20 left-0 h-[calc(100vh-5rem)] w-64 border-r border-border/50 bg-card/50 backdrop-blur-sm p-4 transition-transform duration-300 z-40",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+            "fixed lg:sticky top-20 left-0 h-[calc(100vh-5rem)] w-64 border-r border-border/50 bg-card/50 backdrop-blur-sm p-4 transition-transform duration-300 z-40 overflow-y-auto",
+            sidebarOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
           )}
         >
           <div className="flex flex-col h-full">
@@ -176,8 +203,8 @@ export default function AdminLayout({
             </nav>
 
             <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all"
+              onClick={logout}
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all mt-4"
             >
               <LogOut className="w-4 h-4" />
               Logout

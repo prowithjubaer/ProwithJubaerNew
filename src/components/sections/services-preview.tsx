@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
-import { servicesData } from "@/data/site-data";
+import { servicesData as staticServices } from "@/data/site-data";
+import { useServicesData } from "@/hooks/use-site-data";
 import {
   Video,
   Sparkles,
@@ -43,6 +44,7 @@ const iconColorMap: Record<string, string> = {
 };
 
 export function ServicesPreview() {
+  const servicesData = useServicesData();
   return (
     <section className="relative py-24 overflow-hidden">
       {/* Background */}

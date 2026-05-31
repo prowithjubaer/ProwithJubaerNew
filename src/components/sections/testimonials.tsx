@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { testimonialsData } from "@/data/site-data";
+import { testimonialsData as staticTestimonials } from "@/data/site-data";
+import { useTestimonialsData } from "@/hooks/use-site-data";
 import { Star, Quote } from "lucide-react";
 
 export function Testimonials() {
+  const testimonialsData = useTestimonialsData();
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-500/5 to-transparent" />

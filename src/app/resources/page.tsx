@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { freeResourcesData } from "@/data/site-data";
+import { freeResourcesData as staticResources } from "@/data/site-data";
+import { useResourcesData } from "@/hooks/use-site-data";
 import { Download, FileDown, Users, Sparkles, ArrowRight } from "lucide-react";
 
 export default function ResourcesPage() {
-  const featuredResources = freeResourcesData.filter((r) => r.featured);
-  const otherResources = freeResourcesData.filter((r) => !r.featured);
+  const freeResourcesData = useResourcesData();
+  const featuredResources = (freeResourcesData as typeof staticResources).filter((r) => r.featured);
+  const otherResources = (freeResourcesData as typeof staticResources).filter((r) => !r.featured);
 
   return (
     <div className="pt-24 pb-16">

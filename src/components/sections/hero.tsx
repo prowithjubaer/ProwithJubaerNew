@@ -3,10 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { heroData } from "@/data/site-data";
+import { heroData as staticHeroData } from "@/data/site-data";
+import { useHeroData } from "@/hooks/use-site-data";
 import { ArrowRight, Play, Sparkles, Monitor, Type, MousePointer2, Film, Layers } from "lucide-react";
 
 export function Hero() {
+  const heroData = useHeroData();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32">
       {/* Animated Grid Background */}

@@ -8,18 +8,21 @@ import {
   ArrowUpRight,
   ExternalLink,
 } from "lucide-react";
-import { socialLinks, navigationLinks } from "@/data/site-data";
+import { socialLinks as staticSocial, navigationLinks as staticNav } from "@/data/site-data";
+import { useSocialLinks, useNavigationData } from "@/hooks/use-site-data";
 
 const socialIcons = [
-  { label: "YouTube", href: socialLinks.youtube, letter: "YT" },
-  { label: "Facebook", href: socialLinks.facebook, letter: "FB" },
-  { label: "Instagram", href: socialLinks.instagram, letter: "IG" },
-  { label: "LinkedIn", href: socialLinks.linkedin, letter: "LI" },
-  { label: "Twitter", href: socialLinks.twitter, letter: "X" },
-  { label: "GitHub", href: socialLinks.github, letter: "GH" },
+  { label: "YouTube", key: "youtube" as const, letter: "YT" },
+  { label: "Facebook", key: "facebook" as const, letter: "FB" },
+  { label: "Instagram", key: "instagram" as const, letter: "IG" },
+  { label: "LinkedIn", key: "linkedin" as const, letter: "LI" },
+  { label: "Twitter", key: "twitter" as const, letter: "X" },
+  { label: "GitHub", key: "github" as const, letter: "GH" },
 ];
 
 export function Footer() {
+  const socialLinks = useSocialLinks();
+  const navigationLinks = useNavigationData();
   return (
     <footer className="relative border-t border-border/50 bg-gradient-to-b from-transparent to-primary-500/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -45,7 +48,7 @@ export function Footer() {
               {socialIcons.map((social) => (
                 <motion.a
                   key={social.label}
-                  href={social.href}
+                  href={(socialLinks as Record<string, string>)[social.key] || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -2 }}

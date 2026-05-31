@@ -2,13 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { blogData } from "@/data/site-data";
+import { blogData as staticBlog } from "@/data/site-data";
+import { useBlogData } from "@/hooks/use-site-data";
 import { ArrowRight, Clock, Calendar, Tag } from "lucide-react";
 import { useState } from "react";
 
 const categories = ["All", "Workflow", "Tools", "Design", "AI", "Career", "Tutorial"];
 
 export default function BlogPage() {
+  const blogData = useBlogData();
   const [activeCategory, setActiveCategory] = useState("All");
 
   const filteredPosts =

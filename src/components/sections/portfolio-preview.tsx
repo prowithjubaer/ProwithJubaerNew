@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
-import { portfolioData } from "@/data/site-data";
+import { portfolioData as staticPortfolio } from "@/data/site-data";
+import { usePortfolioData } from "@/hooks/use-site-data";
 import { ArrowRight, ExternalLink, Play } from "lucide-react";
 
 export function PortfolioPreview() {
-  const featuredProjects = portfolioData.filter((p) => p.featured).slice(0, 4);
+  const portfolioData = usePortfolioData();
+  const featuredProjects = (portfolioData as typeof staticPortfolio).filter((p) => p.featured).slice(0, 4);
 
   return (
     <section className="relative py-24 overflow-hidden">

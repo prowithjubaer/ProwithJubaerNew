@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
-import { coursesData } from "@/data/site-data";
+import { coursesData as staticCourses } from "@/data/site-data";
+import { useSiteData } from "@/hooks/use-site-data";
 import { ArrowRight, Star, Users, Clock, BookOpen } from "lucide-react";
 
 export function CoursesPreview() {
-  const featuredCourses = coursesData.filter((c) => c.featured).slice(0, 3);
+  const coursesData = useSiteData("courses", staticCourses);
+  const featuredCourses = (coursesData as typeof staticCourses).filter((c) => c.featured).slice(0, 3);
 
   return (
     <section className="relative py-24 overflow-hidden">

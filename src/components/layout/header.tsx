@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sparkles, Download, LogIn } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { navigationLinks } from "@/data/site-data";
+import { navigationLinks as staticNavLinks } from "@/data/site-data";
+import { useNavigationData } from "@/hooks/use-site-data";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -29,6 +30,8 @@ export function Header() {
 
   // Hide header on admin pages
   if (pathname?.startsWith("/admin")) return null;
+
+  const navigationLinks = useNavigationData();
 
   return (
     <>

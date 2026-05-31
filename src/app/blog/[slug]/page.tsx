@@ -4,7 +4,8 @@ import { use } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { blogData } from "@/data/site-data";
+import { blogData as staticBlog } from "@/data/site-data";
+import { useBlogData } from "@/hooks/use-site-data";
 import {
   ArrowLeft,
   ArrowRight,
@@ -20,7 +21,8 @@ export default function BlogDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const post = blogData.find((p) => p.slug === slug);
+  const blogData = useBlogData();
+  const post = blogData.find((p: { slug: string }) => p.slug === slug);
 
   if (!post) {
     return (

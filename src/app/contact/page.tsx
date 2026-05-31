@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { socialLinks } from "@/data/site-data";
+import { socialLinks as staticSocial } from "@/data/site-data";
+import { useSocialLinks } from "@/hooks/use-site-data";
 import {
   Send,
   Mail,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 export default function ContactPage() {
+  const socialLinks = useSocialLinks();
   const [formStatus, setFormStatus] = useState<"idle" | "success">("idle");
 
   const handleSubmit = (e: React.FormEvent) => {
